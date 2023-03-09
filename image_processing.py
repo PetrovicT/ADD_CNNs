@@ -37,3 +37,4 @@ if __name__ == '__main__':
     file_name = os.path.join(path_3d_images_preprocessed, image_name)
     image_3d = nib.load(file_name)
     cropped_3d_image = crop_3d_image(image_3d)
+    visualization_3d_image(cropped_3d_image)
