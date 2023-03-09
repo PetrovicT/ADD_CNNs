@@ -1,5 +1,6 @@
 import os
 import nibabel as nib
+from graph import *
 import math
 
 
@@ -22,6 +23,7 @@ def crop_3d_image(original_image):
 
     path_new_3d_cropped_image = 'C:/Users/teodo/Desktop/thesis/ADD_CNNs/scans/preprocessed/scan1.nii'  # TODO
     # save_3d_image(cropped_image, path_new_3d_cropped_image)  # TODO
+    graph_compare_original_cropped(original_image, cropped_image)  # TODO
     return cropped_image
 
 
