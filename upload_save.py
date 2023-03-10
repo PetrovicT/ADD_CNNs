@@ -44,6 +44,13 @@ def upload_excel_number_of_subject(excel_path, class_name):
     print("Class: " + class_name + ", number of subjects: " + str(len(unique_subjects)))
 
 
+def split_string_find_image_id(image_name_string):
+    substrings = image_name.split("_")
+    image_id_length = len(substrings)
+    full_image_id = substrings[image_id_length - 1]  # Iid
+    return full_image_id[1::]  # returns only id, without letter I
+
+
 if __name__ == '__main__':
     # path_csv = './csv_files/tableOR_original.csv'
     # upload_csv_number_of_subjects(path_csv, "AD")
@@ -51,3 +58,6 @@ if __name__ == '__main__':
     path_excel = './csv_files/tableOR_original.xlsx'
     upload_excel_number_of_subject(path_excel, "AD")
     upload_excel_number_of_subject(path_excel, "CN")
+
+    image_name = "ADNI_002_S_0295_MR_MPR-R__GradWarp__B1_Correction__N3_Br_20070319114336780_S13407_I45112"
+    print(split_string_find_image_id(image_name))
