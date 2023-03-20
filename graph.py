@@ -1,35 +1,62 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from skimage import io
 import plotly.graph_objects as go
+import plotly.express as px
+import math
 
 
-def graph_compare_original_cropped(original_3d_image, cropped_3d_image):
-    plot_original = original_3d_image.get_fdata()
-    plot_cropped = cropped_3d_image.get_fdata()
+# original_3d_image, cropped_3d_image: numpy array
+def graph_compare_original_cropped(original_3d_image, cropped_3d_image, slice_index=30, view="sagittal"):  # DONE
+    dimension0_difference = original_3d_image.shape[0] - cropped_3d_image.shape[0]  # axial
+    dimension1_difference = original_3d_image.shape[1] - cropped_3d_image.shape[1]  # coronal
+    dimension2_difference = original_3d_image.shape[2] - cropped_3d_image.shape[2]  # sagittal
+
+    slice_index_difference_0 = math.ceil(dimension0_difference / 2)
+    slice_index_difference_1 = math.ceil(dimension1_difference / 2)
+    slice_index_difference_2 = math.ceil(dimension2_difference / 2)
+
     for i in range(2):
         plt.subplot(2, 2, i + 1)
         if i == 0:
-            plt.imshow(plot_original[100, :, ])
+            if view == "axial":
+                plt.imshow(original_3d_image[slice_index + slice_index_difference_0, :, ])
+            if view == "coronal":
+                plt.imshow(original_3d_image[:, slice_index + slice_index_difference_1, ])
+            if view == "sagittal":
+                plt.imshow(original_3d_image[:, :, slice_index + slice_index_difference_2])
         else:
-            plt.imshow(plot_cropped[11, :, ])
-        plt.gcf().set_size_inches(10, 10)
+            if view == "axial":
+                plt.imshow(cropped_3d_image[slice_index, :, ])
+            if view == "coronal":
+                plt.imshow(cropped_3d_image[:, slice_index, ])
+            if view == "sagittal":
+                plt.imshow(cropped_3d_image[:, :, slice_index])
+        plt.gcf().set_size_inches(8, 8)
     plt.show()
 
 
-def visualization_3d_image(path_3d_image):
-    # Import 3d image from path
-    vol = io.imread('./scans/scan1.nii')  # TODO
-    volume = vol.T
-    r, c = volume[0].shape
+# image: numpy array
+def visualization_2d_image(image):  # TODO
+    fig = plt.imshow(image)
+    plt.show()
+
+
+# image: numpy array
+def visualization_3d_image(image, slice_index=30, view="axial"):  # TODO
+    if view == "coronal":
+        image = np.transpose(image, [1, 2, 0])
+    if view == "sagittal":
+        image = np.transpose(image, [0, 2, 1])
+    # vol2 = np.transpose(image, [1, 2, 0])
+    r, c = image[0].shape
 
     # Define frames
     nb_frames = 68
 
     fig = go.Figure(frames=[go.Frame(data=go.Surface(
         z=(6.7 - k * 0.1) * np.ones((r, c)),
-        surfacecolor=np.flipud(volume[67 - k]),
-        cmin=0, cmax=200
+        surfacecolor=np.flipud(image[67 - k]),
+        cmin=0, cmax=1000
     ),
         name=str(k)  # you need to name the frame for the animation to behave properly
     )
@@ -38,8 +65,9 @@ def visualization_3d_image(path_3d_image):
     # Add data to be displayed before animation starts
     fig.add_trace(go.Surface(
         z=6.7 * np.ones((r, c)),
-        surfacecolor=np.flipud(volume[67]),
-        colorscale='Gray',
+        surfacecolor=np.flipud(image[67]),
+        colorscale=[[0, 'rgb(0,0,0)'], [1, 'rgb(255,255,255)']],
+        # colorscale='Gray',
         cmin=0, cmax=200,
         colorbar=dict(thickness=20, ticklen=4)
     ))
@@ -103,4 +131,10 @@ def visualization_3d_image(path_3d_image):
     )
 
     fig.show()
+
+
+if __name__ == '__main__':
+    image_path = './scans/2drgb.nii'
+    # visualization_2d_image(image_path)
+    # testing
 
