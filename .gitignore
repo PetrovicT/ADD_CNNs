@@ -1,0 +1,10 @@
+
+__pycache__/
+
+.idea/
+
+scans/
+
+results/
+
+tables/
