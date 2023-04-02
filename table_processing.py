@@ -37,11 +37,18 @@ def get_image_id(image_name_string: str) -> str:
     return image_id[0]
 
 
+def get_image_subject(image_name_string: str) -> str:
+    substrings = image_name_string.split('\\')
+    full_image_subject = substrings[1]
+    return full_image_subject
+
+
 def get_image_id_from_filename(image_name_string: str) -> str:
     substrings = image_name_string.split('\\')
-    full_image_id = substrings[len(substrings) - 1]  # Iid.nii
+    full_image_id = substrings[len(substrings) - 1]  # Iid.nii or Iid_view_slice_class
+    id_only = full_image_id.split('_')
     # full_image_id[1::]  # id.nii
-    image_id = full_image_id.split('.')  # id
+    image_id = id_only[0].split('.')  # id
     return image_id[0]
 
 

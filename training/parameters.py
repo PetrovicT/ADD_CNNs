@@ -4,13 +4,13 @@ import pandas as pd
 class Parameters:
     def __init__(self):
         # Number of epochs used for training
-        self.num_of_epochs = 50
+        self.num_of_epochs = 20
         # Batch size used
-        self.batch_size = 64
+        self.batch_size = 96
         # Start value for learning rate
-        self.learning_rate = 0.05
+        self.learning_rate = 0.005
         # Learning rate scheduler parameters
-        self.scheduler_step_size = 10
+        self.scheduler_step_size = 7
         self.scheduler_gama = 0.1
 
         # Model name

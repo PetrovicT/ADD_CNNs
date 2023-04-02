@@ -22,6 +22,8 @@ def load_all_nii_images_from_ssd() -> None:
             file_cnt += 1
             # find desired image name and destination
             image_id = get_image_id(filename)
+            image_subject = get_image_subject(filename)
+            print(image_subject)
             image_name_string = get_image_name_with_extension(filename)
             destination_folder = get_image_group(image_id, excel_file_path, excel_sheet_name)
             renamed_image = image_id + ".nii"
@@ -32,10 +34,19 @@ def load_all_nii_images_from_ssd() -> None:
                 os.rename('D:/{}/{}/{}'.format(source_folder, destination_folder, image_name_string),
                           'D:/{}/{}/{}'.format(source_folder, destination_folder, renamed_image))
 
+            """
+            # if the folder already exists, the subject already had scans
+            if not os.path.isdir('D:/preprocessed_OR/subjects/{}'.format(image_subject)):
+                os.mkdir('D:/preprocessed_OR/subjects/{}'.format(image_subject))
+
+            shutil.copy2(filename, 'D:/preprocessed_OR/subjects/{}'.format(image_subject))
+            os.rename('D:/preprocessed_OR/subjects/{}/{}'.format(image_subject, image_name_string),
+                      'D:/preprocessed_OR/subjects/{}/{}'.format(image_subject, renamed_image))
+            """
             if file_cnt % 40 == 0:
                 print("Processed " + str(file_cnt) + " images!")
 
-    print("Number of .nii images: " + str(file_cnt))
+    print("Number of .npy images made: " + str(file_cnt))
 
 
 def crop_3d_image(original_image: np.ndarray) -> np.ndarray:
